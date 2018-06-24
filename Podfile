@@ -6,6 +6,7 @@ target 'TestTask' do
   # Uncomment the next line if you're using Swift or would like to use dynamic frameworks
   # use_frameworks!
   pod 'Texture', '~> 2.7'
+  pod 'ReactiveCocoa', '~> 2.5'
   # Pods for TestTask
 
 end

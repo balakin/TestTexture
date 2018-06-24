@@ -8,6 +8,7 @@
 
 #import "ViewController.h"
 #import "TestTaskNode.h"
+#import <ReactiveCocoa/ReactiveCocoa.h>
 
 @interface ViewController ()
 
@@ -25,6 +26,13 @@
     node.frame = CGRectMake(0, 200, size.width, 100);
 
     [self.view addSubnode:node];
+
+    RACSignal * signal1 = [[RACSignal return:@1] delay:1];
+    RACSignal * signal2 = [[RACSignal return:@2] delay:1];
+    RACSignal * signal3 = [[RACSignal return:@3] delay:1];
+    RACSignal * signal4 = [[RACSignal return:@4] delay:1];
+    RACSignal * signal5 = [[RACSignal return:@5] delay:1];
+    // требуется сделать 2 сигнала паралельно, потом 1 последовательно, 2 паралельно
 
     // Do any additional setup after loading the view, typically from a nib.
 }
