@@ -37,34 +37,25 @@
 
     // Do any additional setup after loading the view, typically from a nib.
     
-    [[RACSignal
-      combineLatest:@[signal1, signal2]
-      reduce:^id(NSNumber *number1, NSNumber *number2)
+    RACSignal *signal6 = [RACSignal zip:@[signal1, signal2]];
+    RACSignal *signal7 = [RACSignal zip:@[signal4, signal5]];
+    RACSignal *signal8 = [RACSignal zip:@[signal6, signal3, signal7]];
+    
+    [[signal8 flattenMap:^RACStream *(id value)
     {
-          return [NSNumber numberWithBool:[number1 intValue] + [number2 intValue] == 3];
-    }]
-    subscribeNext:^(NSNumber *completed12)
-    {
-        if ([completed12 intValue] > 0)
-        [signal3 subscribeNext:^(NSNumber *number3)
+        if(!value)
         {
-            if ([number3 intValue] == 3)
-            {
-                [[RACSignal
-                  combineLatest:@[signal4, signal5]
-                  reduce:^id(NSNumber *number4, NSNumber *number5)
-                  {
-                      return [NSNumber numberWithBool:[number4 intValue] + [number5 intValue] == 9];
-                  }]
-                 subscribeNext:^(NSNumber *completed45)
-                 {
-                     if ([completed45 intValue] > 0)
-                     NSLog(@"Finished!!!");
-                 }];
-            }
-        }];
+            return [RACSignal error: nil];
+        }
+        else
+        {
+            return [RACSignal return: value];
+        }
+    }]
+    subscribeNext:^(id x)
+    {
+        NSLog(@"%@", x);
     }];
-
 }
 
 
