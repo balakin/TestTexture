@@ -39,20 +39,9 @@
     
     RACSignal *signal6 = [RACSignal zip:@[signal1, signal2]];
     RACSignal *signal7 = [RACSignal zip:@[signal4, signal5]];
-    RACSignal *signal8 = [RACSignal zip:@[signal6, signal3, signal7]];
+    RACSignal *signal8 = [@[signal6, signal3, signal7].rac_sequence.signal flatten];
     
-    [[signal8 flattenMap:^RACStream *(id value)
-    {
-        if(!value)
-        {
-            return [RACSignal error: nil];
-        }
-        else
-        {
-            return [RACSignal return: value];
-        }
-    }]
-    subscribeNext:^(id x)
+    [signal8 subscribeNext:^(id x)
     {
         NSLog(@"%@", x);
     }];
