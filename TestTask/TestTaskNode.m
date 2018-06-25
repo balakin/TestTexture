@@ -58,7 +58,41 @@
 
 - (ASLayoutSpec *)layoutSpecThatFits:(ASSizeRange)constrainedSize
 {
-    // Код нужно писать здесь
+	ASStackLayoutSpec *verticalLeftSideStackSpec = [[ASStackLayoutSpec alloc] init];
+    verticalLeftSideStackSpec.direction = ASStackLayoutDirectionVertical;
+    verticalLeftSideStackSpec.spacing = 10.0;
+    verticalLeftSideStackSpec.children = @[_titleTextNode, _detailTextNode];
+    
+    ASStackLayoutSpec *horizontalLeftSideStackSpec = [[ASStackLayoutSpec alloc] init];
+    horizontalLeftSideStackSpec.direction = ASStackLayoutDirectionHorizontal;
+    horizontalLeftSideStackSpec.spacing = 10.0;
+    horizontalLeftSideStackSpec.children = @[_avatarNode, verticalLeftSideStackSpec];
+    
+    ASStackLayoutSpec *horizontalRightSideStackSpec = [[ASStackLayoutSpec alloc] init];
+    horizontalRightSideStackSpec.direction = ASStackLayoutDirectionHorizontal;
+    horizontalRightSideStackSpec.spacing = 10.0;
+    horizontalRightSideStackSpec.children = @[_actionsNode, _favoriteNode];
+    
+    ASRelativeLayoutSpec *relativeRightSideStackSpec = [ASRelativeLayoutSpec
+                                                   relativePositionLayoutSpecWithHorizontalPosition:ASRelativeLayoutSpecPositionEnd
+                                                   verticalPosition:ASRelativeLayoutSpecPositionEnd
+                                                   sizingOption:ASRelativeLayoutSpecSizingOptionDefault
+                                                   child:horizontalRightSideStackSpec];
+    
+    ASStackLayoutSpec *verticalRightSideStackSpec = [[ASStackLayoutSpec alloc] init];
+    verticalRightSideStackSpec.direction = ASStackLayoutDirectionVertical;
+    verticalRightSideStackSpec.justifyContent = ASStackLayoutJustifyContentSpaceBetween;
+    verticalRightSideStackSpec.children = @[_dateTextNode, relativeRightSideStackSpec];
+    
+    ASStackLayoutSpec *horizontalStackSpec = [[ASStackLayoutSpec alloc] init];
+    horizontalStackSpec.direction = ASStackLayoutDirectionHorizontal;
+    horizontalStackSpec.justifyContent = ASStackLayoutJustifyContentSpaceBetween;
+    horizontalStackSpec.children = @[horizontalLeftSideStackSpec, verticalRightSideStackSpec];
+    
+    ASInsetLayoutSpec *insetSpec = [ASInsetLayoutSpec
+                                             insetLayoutSpecWithInsets:UIEdgeInsetsMake(10.0, 10.0, 10.0, 10.0) child:horizontalStackSpec];
+    
+    return insetSpec;
 }
 
 @end
