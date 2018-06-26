@@ -29,7 +29,9 @@
 
     RACSignal * signal1 = [[RACSignal return:@1] delay:1];
     RACSignal * signal2 = [[RACSignal return:@2] delay:1];
-    RACSignal * signal3 = [[RACSignal return:@3] delay:1];
+    RACSignal * signal3 = [[[RACSignal return:@3] delay:3] doNext:^(id x) {
+        NSLog(@"complete signal 3");
+    }];
     RACSignal * signal4 = [[RACSignal return:@4] delay:1];
     RACSignal * signal5 = [[RACSignal return:@5] delay:1];
     
@@ -37,13 +39,17 @@
 
     // Do any additional setup after loading the view, typically from a nib.
     
-    RACSignal *signal6 = [RACSignal zip:@[signal1, signal2]];
-    RACSignal *signal7 = [RACSignal zip:@[signal4, signal5]];
-    RACSignal *signal8 = [@[signal6, signal3, signal7].rac_sequence.signal flatten];
+    RACSignal *signal6 = [[RACSignal zip:@[signal1, signal2]] doNext:^(id x) {
+        NSLog(@"complete signal1, signal2");
+    }];
+    RACSignal *signal7 = [[RACSignal zip:@[signal4, signal5]] doNext:^(id x) {
+        NSLog(@"complete signal4, signal5");
+    }];
     
-    [signal8 subscribeNext:^(id x)
-    {
-        NSLog(@"%@", x);
+    RACSignal * result = [[RACSignal concat:@[signal6, signal3, signal7]] collect];
+    
+    [result subscribeNext:^(id x) {
+        NSLog(@"final complete");
     }];
 }
 
